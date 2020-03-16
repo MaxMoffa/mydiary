@@ -4,8 +4,8 @@
   "background_color": "#fff8e1",
   "display": "standalone",
   "orientation": "portrait",
-  "scope": "/",
-  "start_url": "/",
+  "scope": "./",
+  "start_url": "./",
   "icons": [    {
      "src": "./media/icons-web-app/android-icon-36x36.png",
      "sizes": "36x36",
