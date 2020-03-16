@@ -1,0 +1,63 @@
+<script>
+  export let text = "Hello world!";
+  export let actionText = "Action";
+  export let duration = 2000;
+  export let click = null;
+
+  function buttonClick(){
+    click();
+    document.querySelector(".snackbar-element").style.display = "none";
+  }
+
+  setTimeout(() => {
+    document.querySelector(".snackbar-element").style.display = "none";
+  }, duration);
+</script>
+
+<main class="snackbar-element">
+  <div>
+    <span>
+      <span>{text}</span>
+      {#if click}
+        <span class="click" on:click={buttonClick}>{actionText.toUpperCase()}</span>
+      {/if}
+    </span>
+  </div>
+</main>
+
+<style>
+  main{
+    position: fixed;
+    width: 100%;
+    height: auto;
+    bottom: 0;
+    left: 0;
+
+    z-index: 3;
+  }
+
+  main div{
+    position: absolute;
+    display: inline-block;
+    width: fit-content;
+    height: fit-content;
+    bottom: 0;
+    margin: 8px;
+
+    background-color: rgba(33, 33, 33, 0.96);
+    border-radius: 6px;
+    color: #fff;
+    font-size: 14px;
+  }
+
+  main div span{
+    display: inline-block;
+    margin: 4px 8px;
+    user-select: none;
+  }
+
+  .click{
+    color: rgb(255, 102, 51);
+    cursor: pointer;
+  }
+</style>
