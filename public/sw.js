@@ -16,7 +16,7 @@ const CACHE_FILES = [
   "./manifest.json",
   "./global.css",
   "./media/image/loading.gif",
-  "./media/image/error.png",
+  "./media/image/error.gif",
   "./media/image/empty.gif",
   "./build/bundle.css",
   "./build/bundle.css.map",

@@ -17,6 +17,8 @@
 	import Option from './Pages/Option.svelte';
 	import Snackbar from './Components/Snackbar.svelte';
 
+	let refreshing;
+
 	window.addEventListener('beforeinstallprompt', (e) => {
 		e.preventDefault();
 		console.log(e);
