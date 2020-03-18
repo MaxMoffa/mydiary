@@ -52,24 +52,29 @@
 </main>
 
 <style>
+
+  *{
+    -webkit-tap-highlight-color: transparent;
+  }
+
   main{
     width: fit-content;
     height: fit-content;
 
     border-radius: 50%;
     cursor: pointer;
-    transition: 0.2s background;
+    transition: 0.1s background;
     z-index: 1;
   }
 
   main:active{
     background-color: rgba(0, 0, 0, 0.4) !important;
-    transition: 0.2s background;
+    transition: 0.1s background;
   }
 
   :global(body.dark) main:active{
     background-color: #424242 !important;
-    transition: 0.2s background;
+    transition: 0.1s background;
   }
 
   main i{

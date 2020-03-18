@@ -43,6 +43,7 @@
         let data = event.target.result;
         if(data !== undefined){
           title = data.title;
+          date = data.date;
           id = data.id;
           document.querySelector(".ql-editor").innerHTML = data.body;
         }
@@ -94,6 +95,11 @@
 </main>
 
 <style>
+
+  *{
+      outline: 0;
+  }
+
   main{
     position: fixed;
     width: 100%;
@@ -159,6 +165,9 @@
 	}
 
   :global(.ql-toolbar){
+    position: -webkit-sticky;
+    position: sticky;
+    top: 0;
     margin: 8px 16px;
     border-radius: 20px;
     border-color: #fff;

@@ -16,6 +16,11 @@
 </main>
 
 <style>
+
+*{
+  -webkit-tap-highlight-color: transparent;
+}
+
 main{
   width: fit-content;
   height: fit-content;
@@ -27,6 +32,7 @@ main{
   transition: 0.3s opacity !important;
   padding: 8px;
   color: #fff;
+  user-select: none;
 }
 
 :global(body.dark) main{

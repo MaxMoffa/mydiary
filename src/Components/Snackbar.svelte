@@ -57,7 +57,7 @@
   }
 
   .click{
-    color: rgb(255, 102, 51);
+    color: #fff8e1;
     cursor: pointer;
   }
 </style>

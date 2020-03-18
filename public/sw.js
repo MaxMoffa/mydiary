@@ -8,7 +8,7 @@
 
 //Configuration
 
-const CACHE_VERSION = "1.0.0";
+const CACHE_VERSION = "1.0.1";
 const CACHE_NAME = "MyDiary:" + CACHE_VERSION;
 const CACHE_FILES = [
   "./",
@@ -18,6 +18,7 @@ const CACHE_FILES = [
   "./media/image/loading.gif",
   "./media/image/error.gif",
   "./media/image/empty.gif",
+  "./media/css/quill.snow.css",
   "./build/bundle.css",
   "./build/bundle.css.map",
   "./build/bundle.js",

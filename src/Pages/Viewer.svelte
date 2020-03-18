@@ -126,4 +126,16 @@
     font-size: 20px;
   }
 
+  :global(.ql-size-large){
+    font-size: 1.5em;
+  }
+
+  :global(.ql-size-huge){
+    font-size: 2.5em;
+  }
+
+  :global(.ql-size-small){
+    font-size: 0.75em;
+  }
+
 </style>

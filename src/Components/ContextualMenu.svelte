@@ -54,6 +54,11 @@
 </main>
 
 <style>
+
+  *{
+    -webkit-tap-highlight-color: transparent;
+  }
+
   main{
     display: flex;
     position: absolute;
@@ -94,7 +99,7 @@
   .option div{
     width: 100%;
     height: fit-content;
-    padding: 8px 0;
+    padding: 12px 0;
     transition: 0.2s background;
     cursor: pointer;
   }

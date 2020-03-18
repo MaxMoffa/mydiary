@@ -1,6 +1,5 @@
 <svelte:head>
 	<link href="https://fonts.googleapis.com/css2?family=Beth+Ellen&display=swap" rel="stylesheet">
-	<link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
 </svelte:head>
 
 <script>
@@ -22,17 +21,17 @@
 	window.addEventListener('beforeinstallprompt', (e) => {
 		e.preventDefault();
 		console.log(e);
-		new Snackbar({
-			target: document.body,
-			props: {
-				duration: 10000,
-				text: "Install this app",
-				actionText: "Install",
-				click: function(){
-					installPwa(e)
-				}
-			}
-		});
+		// new Snackbar({
+		// 	target: document.body,
+		// 	props: {
+		// 		duration: 10000,
+		// 		text: "Install this app",
+		// 		actionText: "Install",
+		// 		click: function(){
+		// 			installPwa(e)
+		// 		}
+		// 	}
+		// });
 	});
 
 	if ('serviceWorker' in navigator) {
@@ -227,6 +226,7 @@ function installPwa(deferredPrompt) {
 
 	function contextualMenu(event) {
 		event.preventDefault();
+		window.navigator.vibrate(200);
 		let menu = new ContextualMenu({
 			target: document.body,
 			props: {
