@@ -2,6 +2,8 @@
   import Quill from 'quill';
   import {onMount, createEventDispatcher} from 'svelte';
   import Fab from '../Components/Fab.svelte';
+  import Snackbar from '../Components/Snackbar.svelte';
+  import alertBox from '../Components/alertBox.svelte';
 
   const dispatch = createEventDispatcher();
 
@@ -24,6 +26,8 @@
 
   let editor = null;
   let title = "";
+  let changes = false;
+
   console.log(id);
   onMount(() => {
     editor = new Quill('#editor-creator', {
@@ -33,11 +37,17 @@
       placeholder: 'Note',
       theme: 'snow'
     });
+    editor.on('text-change', function(delta, oldDelta, source) {
+      if (source == 'user') {
+        changes = true;
+      }
+    });
     if(db !== null && id !== null){
       let objectStore = db.transaction(["pages"], "readwrite").objectStore("pages");
       let request = objectStore.get(id);
       request.onerror = function(event) {
         console.log(event);
+        alertUser("Ops! There is a problem");
       };
       request.onsuccess = function(event) {
         let data = event.target.result;
@@ -52,13 +62,37 @@
   })
 
   function closePage() {
-    if(context) context.$destroy();
-    document.body.style.overflow = "auto";
+    if(changes){
+      let alert = new alertBox({
+        target: document.body,
+        props: {}
+      });
+      alert.$set({
+        context: alert
+      });
+      alert.$on("answer", (event) => {
+        if(event.detail.response){
+          if(context) context.$destroy();
+          document.body.style.overflow = "auto";
+        }
+      });
+    }else {
+      if(context) context.$destroy();
+      document.body.style.overflow = "auto";
+    }
   }
 
   function saveNote() {
     let text = document.querySelector(".ql-editor").innerHTML;
-    if(db === null || editor === null || title === "" || text === "<p><br></p>") return;
+    if(title === "") {
+      alertUser("Hey! You need a title...");
+      return;
+    }
+    if(text === "<p><br></p>"){
+      alertUser("Hey! You need a body...");
+      return;
+    }
+    if(db === null || editor === null) return;
     let item = {
       title: title,
       body: text,
@@ -74,11 +108,30 @@
     };
     request.onerror = function(event) {
       console.log(event);
+      alertUser("Ops! There is a problem");
     };
+  }
+
+  function scollEvent(event) {
+    if(event.target.scrollTop > 180) document.querySelector(".ql-toolbar").style.position = "fixed";
+    else document.querySelector(".ql-toolbar").style.position = "static";
+  }
+
+  function alertUser(text) {
+    let snackbar = new Snackbar({
+    	target: document.body,
+    	props: {
+    		duration: 2000,
+    		text: text,
+    	}
+    });
+    snackbar.$set({
+      context: snackbar
+    });
   }
 </script>
 
-<main>
+<main on:scroll={scollEvent}>
   {#if window.document.body.classList.contains('dark')}
     <Fab on:click={closePage} fontSize="32px" margin="16px" color="#fff" background="#212121" shadow="#212121" icon="arrow_back" position="top-left" />
     <Fab on:click={saveNote} fontSize="32px" margin="16px" color="#fff" background="#212121" shadow="#212121" icon="save" position="top-right" />
@@ -165,12 +218,16 @@
 	}
 
   :global(.ql-toolbar){
-    position: -webkit-sticky;
-    position: sticky;
-    top: 0;
+    top: 5px;
     margin: 8px 16px;
     border-radius: 20px;
     border-color: #fff;
+    background-color: #fff8e1 !important;
+    z-index: 4 !important;
+  }
+
+  :global(body.dark) :global(.ql-toolbar){
+    background-color: #212121 !important;
   }
 
   :global(body.dark) :global(.ql-editor)::before {

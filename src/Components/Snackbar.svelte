@@ -1,16 +1,23 @@
+<script context="module">
+	const element = new Set();
+</script>
+
 <script>
   export let text = "Hello world!";
   export let actionText = "Action";
   export let duration = 2000;
   export let click = null;
+  export let context = null;
 
   function buttonClick(){
     click();
     document.querySelector(".snackbar-element").style.display = "none";
+    context.$destroy();
   }
 
   setTimeout(() => {
     document.querySelector(".snackbar-element").style.display = "none";
+    if(context) context.$destroy();
   }, duration);
 </script>
 

@@ -10,6 +10,15 @@
 
   export let context = null;
   let theme = localStorage.getItem("theme-mode-diary");
+  let version = "...";
+  if(navigator.serviceWorker.controller){
+    navigator.serviceWorker.addEventListener('message', event => {
+      version = event.data.version;
+    });
+    navigator.serviceWorker.controller.postMessage({
+      action: "getVersion"
+    });
+  }
 
   function closePage() {
     if(context) context.$destroy();
@@ -61,7 +70,7 @@
         </div>
         <div class="option">
           <label for="theme-selector">Version</label>
-          <div>1.0.1</div>
+          <div>{version}</div>
         </div>
         <div class="option">
           <label for="theme-selector">Author</label>

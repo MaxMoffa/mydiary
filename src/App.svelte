@@ -15,12 +15,13 @@
 	import Viewer from './Pages/Viewer.svelte';
 	import Option from './Pages/Option.svelte';
 	import Snackbar from './Components/Snackbar.svelte';
+	import alertBox from './Components/alertBox.svelte';
 
 	let refreshing;
 
-	window.addEventListener('beforeinstallprompt', (e) => {
-		e.preventDefault();
-		console.log(e);
+	// window.addEventListener('beforeinstallprompt', (e) => {
+	// 	e.preventDefault();
+	// 	console.log(e);
 		// new Snackbar({
 		// 	target: document.body,
 		// 	props: {
@@ -32,7 +33,7 @@
 		// 		}
 		// 	}
 		// });
-	});
+	// });
 
 	if ('serviceWorker' in navigator) {
 		window.addEventListener('load', function() {
@@ -43,7 +44,7 @@
 					update.addEventListener("statechange", () => {
 						if(update.state === "installed"){
 							if(navigator.serviceWorker.controller){
-								new Snackbar({
+								let snackbar = new Snackbar({
 									target: document.body,
 									props: {
 										duration: 10000,
@@ -56,6 +57,9 @@
 										}
 									}
 								});
+								snackbar.$set({
+						      context: snackbar
+						    });
 							}
 						}
 					});
@@ -214,19 +218,30 @@ function installPwa(deferredPrompt) {
 	}
 
 	function destroy(id) {
-		let objectStore = db.transaction(["pages"], "readwrite").objectStore("pages");
-		let request = objectStore.delete(id);
-		request.onerror = function(event) {
-			console.log(event);
-		};
-		request.onsuccess = function(event) {
-			refreshList();
-		};
+		let alert = new alertBox({
+			target: document.body,
+			props: {}
+		});
+		alert.$set({
+			context: alert
+		});
+		alert.$on("answer", (event) => {
+			if(event.detail.response){
+				let objectStore = db.transaction(["pages"], "readwrite").objectStore("pages");
+				let request = objectStore.delete(id);
+				request.onerror = function(event) {
+					console.log(event);
+				};
+				request.onsuccess = function(event) {
+					refreshList();
+				};
+			}
+		});
 	}
 
 	function contextualMenu(event) {
 		event.preventDefault();
-		window.navigator.vibrate(200);
+		window.navigator.vibrate(100);
 		let menu = new ContextualMenu({
 			target: document.body,
 			props: {
@@ -263,7 +278,7 @@ function installPwa(deferredPrompt) {
 		option.$on("changeTheme", (event) => {
 			theme = event.detail.theme;
 			if(theme === "dark") setTheme("#212121", false);
-			else setTheme("#fff8e1", false);
+			else setTheme("rgb(255,248,225)", false);
 		});
 	}
 

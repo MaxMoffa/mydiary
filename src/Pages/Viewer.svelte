@@ -2,6 +2,7 @@
   import ImageElement from '../Components/ImageElement.svelte';
   import {createEventDispatcher} from 'svelte';
   import Fab from '../Components/Fab.svelte';
+  import Snackbar from '../Components/Snackbar.svelte';
 
   const dispatch = createEventDispatcher();
 
@@ -21,6 +22,7 @@
     let request = objectStore.get(id);
     request.onerror = function(event) {
       console.log(event);
+      alertUser("Ops! There is a problem");
       status = 1;
     };
     request.onsuccess = function(event) {
@@ -32,10 +34,12 @@
         status = 2;
       }else{
         status = 3;
+        alertUser("Ops! There is nothing about it");
       }
     };
   }else{
     status = 1;
+    alertUser("Ops! There is a problem");
   }
 
   function closePage() {
@@ -48,6 +52,19 @@
       id: id
     })
     closePage();
+  }
+
+  function alertUser(text) {
+    let snackbar = new Snackbar({
+      target: document.body,
+      props: {
+        duration: 2000,
+        text: text,
+      }
+    });
+    snackbar.$set({
+      context: snackbar
+    });
   }
 </script>
 
@@ -136,6 +153,15 @@
 
   :global(.ql-size-small){
     font-size: 0.75em;
+  }
+
+  :global(.ql-syntax){
+    background-color: #000;
+    color: #fff;
+    border: 1px solid #ccc;
+    overflow: visible;
+    white-space: pre-wrap;
+    padding: 8px;
   }
 
 </style>

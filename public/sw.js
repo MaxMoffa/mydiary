@@ -8,7 +8,7 @@
 
 //Configuration
 
-const CACHE_VERSION = "1.0.1";
+const CACHE_VERSION = "1.0.2";
 const CACHE_NAME = "MyDiary:" + CACHE_VERSION;
 const CACHE_FILES = [
   "./",
@@ -27,6 +27,18 @@ const CACHE_FILES = [
 
 //Functions
 console.log(CACHE_NAME);
+
+self.addEventListener('message', function (event) {
+  if (event.data.action === 'skipWaiting') {
+    self.skipWaiting();
+  }else if(event.data.action === "getVersion"){
+    self.clients.matchAll().then(clients => {
+      clients.forEach(client => client.postMessage({
+        version: CACHE_VERSION
+      }));
+    })
+  }
+});
 
 self.addEventListener('install', function(event) {
   event.waitUntil(

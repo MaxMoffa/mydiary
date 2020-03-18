@@ -29,7 +29,7 @@
       opacity = 1;
       setTimeout(() => {
         isClick = true;
-      }, 1000);
+      }, 500);
       dispatch("longpress",{
         id: id,
         title: title
