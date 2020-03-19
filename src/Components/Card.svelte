@@ -13,7 +13,7 @@
 
   window.oncontextmenu = function (){
     return false;
-}
+  }
 
   function click() {
     dispatch("click", {
@@ -29,12 +29,12 @@
       opacity = 1;
       setTimeout(() => {
         isClick = true;
-      }, 500);
+      }, 1000);
       dispatch("longpress",{
         id: id,
         title: title
       });
-    }, 1000);
+    }, 500);
   }
 
   function stopClicking(event) {

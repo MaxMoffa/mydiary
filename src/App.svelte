@@ -18,22 +18,13 @@
 	import alertBox from './Components/alertBox.svelte';
 
 	let refreshing;
+	let deferredPrompt = null;
 
-	// window.addEventListener('beforeinstallprompt', (e) => {
-	// 	e.preventDefault();
-	// 	console.log(e);
-		// new Snackbar({
-		// 	target: document.body,
-		// 	props: {
-		// 		duration: 10000,
-		// 		text: "Install this app",
-		// 		actionText: "Install",
-		// 		click: function(){
-		// 			installPwa(e)
-		// 		}
-		// 	}
-		// });
-	// });
+	window.addEventListener('beforeinstallprompt', (e) => {
+		e.preventDefault();
+		console.log(e);
+		deferredPrompt = e;
+	});
 
 	if ('serviceWorker' in navigator) {
 		window.addEventListener('load', function() {
@@ -78,7 +69,7 @@ navigator.serviceWorker.addEventListener('controllerchange', function () {
 	refreshing = true;
 });
 
-function installPwa(deferredPrompt) {
+function installPwa() {
  deferredPrompt.prompt();
  deferredPrompt.userChoice.then((choiceResult) => {
 	 if (choiceResult.outcome === 'accepted') {
@@ -199,6 +190,9 @@ function installPwa(deferredPrompt) {
 		creator.$on("creation", () => {
 			refreshList();
 		});
+		creator.$on("destroy", (event) => {
+			viewPage(event);
+		});
 	}
 
 	function viewPage(event) {
@@ -305,9 +299,15 @@ function installPwa(deferredPrompt) {
 		<ImageElement class="loading" text="Write down two lines" src="./media/image/empty.gif" alt="No data..." />
 	{/if}
 	{#if theme === "dark"}
+		{#if deferredPrompt !== null}
+			<Fab fontSize="32px" margin="6px" color="#fff" background="#212121" shadow="#212121" icon="get_app" position="top-left" on:click={installPwa} />
+		{/if}
     <Fab positionType="fixed" on:click={createPage} fontSize="32px" color="#000" background="#fff8e1" shadow="#000" icon="create" />
     <Fab fontSize="32px" margin="6px" color="#fff" background="#212121" shadow="#212121" icon="settings" position="top-right" on:click={openOption} />
   {:else}
+		{#if deferredPrompt !== null}
+			<Fab fontSize="32px" margin="6px" color="#000" background="#fff8e1" shadow="#fff8e1" icon="get_app" position="top-left" on:click={installPwa} />
+		{/if}
     <Fab positionType="fixed" on:click={createPage} fontSize="32px" shadow="#fff8e1" icon="create" />
     <Fab fontSize="32px" margin="6px" color="#000" background="#fff8e1" shadow="#fff8e1" icon="settings" position="top-right" on:click={openOption} />
   {/if}

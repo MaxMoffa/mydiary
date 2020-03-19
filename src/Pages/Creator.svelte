@@ -1,6 +1,6 @@
 <script>
   import Quill from 'quill';
-  import {onMount, createEventDispatcher} from 'svelte';
+  import {onMount, onDestroy, createEventDispatcher} from 'svelte';
   import Fab from '../Components/Fab.svelte';
   import Snackbar from '../Components/Snackbar.svelte';
   import alertBox from '../Components/alertBox.svelte';
@@ -28,7 +28,6 @@
   let title = "";
   let changes = false;
 
-  console.log(id);
   onMount(() => {
     editor = new Quill('#editor-creator', {
       modules: {
@@ -42,6 +41,7 @@
         changes = true;
       }
     });
+
     if(db !== null && id !== null){
       let objectStore = db.transaction(["pages"], "readwrite").objectStore("pages");
       let request = objectStore.get(id);
@@ -59,7 +59,15 @@
         }
       };
     }
-  })
+  });
+
+  onDestroy(() => {
+    if(id){
+      dispatch("destroy", {
+        id: id
+      });
+    }
+  });
 
   function closePage() {
     if(changes){
@@ -102,7 +110,6 @@
     let objectStore = db.transaction(["pages"], "readwrite").objectStore("pages");
     let request = objectStore.put(item);
     request.onsuccess = function(event) {
-      console.log(event);
       dispatch("creation", {});
       if(context) context.$destroy();
     };
