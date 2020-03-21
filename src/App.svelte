@@ -16,6 +16,7 @@
 	import Option from './Pages/Option.svelte';
 	import Snackbar from './Components/Snackbar.svelte';
 	import alertBox from './Components/alertBox.svelte';
+	import Autocomplete from './Components/Autocomplete.svelte';
 
 	let refreshing;
 	let deferredPrompt = null;
@@ -84,9 +85,11 @@ function installPwa() {
 }
 
 	let theme = localStorage.getItem("theme-mode-diary");
+	let isFirstStart = false;
 	if(!theme){
 		theme = "light";
 		localStorage.setItem("theme-mode-diary", "light");
+		isFirstStart = true;
 	}
 	if(theme === "dark") setTheme("#212121");
 	else setTheme("#fff8e1", false);
@@ -96,8 +99,8 @@ function installPwa() {
 		[1000, 2, 3],
 	];
 	const texture = [
-		"./media/cover/diagmonds.png",
 		"./media/cover/inspiration-geometry.png",
+		"./media/cover/diagmonds.png",
 		"./media/cover/3px-tile.png",
 		"./media/cover/60-lines.png",
 		"./media/cover/axiom-pattern.png",
@@ -133,7 +136,23 @@ function installPwa() {
 	onMount(() => {
 		request.onsuccess = (event) => {
 			db = event.target.result;
-			refreshList();
+			if(isFirstStart){
+				let store = db.transaction(["pages"], "readwrite").objectStore("pages");
+				let tutorial = store.put({
+					title: "Tutorial 🔥",
+		      body: "<p>Welcome to <span class=\"ql-size-large\">My Diary! 🤩</span></p><p>Your first virtual diary, here are some <span style=\"background-color: rgb(102, 185, 102);\">tips and tricks</span> for you in order to better use this app:</p><ul><li><strong>Long press</strong> (or <strong>Right click</strong>) on a note will display a contextual menu</li><li><strong>Single click</strong> on a note will open it in reading mode</li><li>You can set a <strong>dark theme</strong> in the option menu</li><li>In order to <strong>create a note</strong> you have to access the Creator page by clicking on the button in the bottom</li></ul><p>For any info you can check my <a href=\"https://dev.to/maxmoffa\" target=\"_blank\" style=\"background-color: rgb(235, 214, 255);\">dev profile</a> or the page of the repository on <a href=\"https://github.com/MaxMoffa/MyDiary\" target=\"_blank\" style=\"background-color: rgb(255, 255, 204);\">Github</a></p><p>If you really like this project you can <a href=\"https://www.buymeacoffee.com/ABxD3lK\" target=\"_blank\" style=\"background-color: rgb(255, 235, 204);\">offer me a coffee</a>, every coffee will be used in order to work on projects like this one💪</p>",
+		      date: new Date().toLocaleDateString(),
+				});
+				tutorial.onsuccess = function(event) {
+					console.log("Tutorial generated");
+					refreshList();
+				};
+				tutorial.onerror = function(event) {
+					console.log(event);
+					console.log("Ops! There is a problem with the tutorial");
+					refreshList();
+				};
+			}else refreshList();
 		}
 
 		request.onerror = (event) => {
@@ -151,31 +170,38 @@ function installPwa() {
 		};
 	});
 
-	function refreshList() {
+	function refreshList(info) {
+		let query = false;
+		if(info){
+			query = info.detail.query.toLowerCase();
+		}
 		status = 0;
 		items_arr = [];
 		let objectStore = db.transaction(["pages"]).objectStore("pages");
 		objectStore.openCursor().onsuccess = function(event) {
 			cursor = event.target.result;
 			if (cursor) {
-				let item = gridHelp.item({
-					w: 1,
-					h: 2,
-					x: 0,
-					y: 0,
-					id: cursor.key,
-					date: cursor.value.date,
-					title: cursor.value.title,
-					background: colors.val(counter),
-					texture: texture.val(counter),
-					static: true,
-					resizable: false,
-				});
-				let findOutPosition = gridHelp.findSpaceForItem(item, items_arr, 2);
-				items_arr = [...[{ ...item, ...findOutPosition }], ...items_arr];
-				limit--;
-				counter++;
-				if(limit > 0) cursor.continue();
+				if(!query || cursor.value.title.toLowerCase().includes(query)){
+					let item = gridHelp.item({
+						w: 1,
+						h: 2,
+						x: 0,
+						y: 0,
+						id: cursor.key,
+						date: cursor.value.date,
+						name: cursor.value.title,
+						background: colors.val(counter),
+						texture: texture.val(counter),
+						static: true,
+						resizable: false,
+					});
+					let findOutPosition = gridHelp.findSpaceForItem(item, items_arr, 2);
+					items_arr = [...[{ ...item, ...findOutPosition }], ...items_arr];
+					limit--;
+					counter++;
+				}
+				cursor.continue();
+				//if(limit > 0) cursor.continue();
 			}else {
 				counter = 0;
 				if(limit === 10) status = 3;
@@ -305,9 +331,10 @@ function installPwa() {
 
 <main>
 	<Header />
+	<Autocomplete on:change={refreshList} />
 	{#if status === 2}
 		<Grid useTransform {breakpoints} {items_arr} bind:items={items_arr} cols={4} let:item rowHeight={80} gap={5}>
-			<Card title={item.title} date={item.date} id={item.id} background={item.background} texture={item.texture} on:click={viewPage} on:longpress={contextualMenu} on:contextmenu={contextualMenu} />
+			<Card title={item.name} date={item.date} id={item.id} background={item.background} texture={item.texture} on:click={viewPage} on:longpress={contextualMenu} on:contextmenu={contextualMenu} />
 		</Grid>
 	{:else if status === 0}
 		<ImageElement class="loading" src="./media/image/loading.gif" alt="Loading..." />

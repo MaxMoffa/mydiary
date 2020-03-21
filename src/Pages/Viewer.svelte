@@ -140,6 +140,7 @@
 
   .text{
     margin-top: 64px;
+    margin-bottom: 64px;
     font-size: 20px;
   }
 

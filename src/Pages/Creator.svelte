@@ -16,6 +16,7 @@
   [{ 'size': ['small', false, 'large', 'huge'] }],
   [{ 'background': [] }],
   [{ 'align': [] }],
+  ['link', 'image'],
   ['clean']
 ];
 
@@ -124,7 +125,7 @@
     let toolbar = document.querySelector(".ql-toolbar");
     let editor = document.querySelector("#editor-creator");
     if(event.target.scrollTop > 180){
-      editor.style.marginTop = (toolbar.offsetHeight + 16) + "px";
+      editor.style.marginTop = (toolbar.offsetHeight + 45) + "px";
       toolbar.style.position = "fixed";
     }else{
       editor.style.marginTop = "0";

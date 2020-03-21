@@ -8,7 +8,7 @@
 
 //Configuration
 
-const CACHE_VERSION = "1.0.5";
+const CACHE_VERSION = "1.0.6";
 const CACHE_NAME = "MyDiary:" + CACHE_VERSION;
 const CACHE_FILES = [
   "./",
