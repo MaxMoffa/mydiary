@@ -96,14 +96,14 @@ function installPwa() {
 		[1000, 2, 3],
 	];
 	const texture = [
-		"../media/cover/diagmonds.png",
-		"../media/cover/inspiration-geometry.png",
-		"../media/cover/3px-tile.png",
-		"../media/cover/60-lines.png",
-		"../media/cover/axiom-pattern.png",
-		"../media/cover/basketball.png",
-		"../media/cover/cartographer.png",
-		"../media/cover/cubes.png",
+		"./media/cover/diagmonds.png",
+		"./media/cover/inspiration-geometry.png",
+		"./media/cover/3px-tile.png",
+		"./media/cover/60-lines.png",
+		"./media/cover/axiom-pattern.png",
+		"./media/cover/basketball.png",
+		"./media/cover/cartographer.png",
+		"./media/cover/cubes.png",
 	];
 	const colors = [
 		"#b71c1c",
