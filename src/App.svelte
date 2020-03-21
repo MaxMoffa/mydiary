@@ -132,6 +132,8 @@ function installPwa() {
 	let items_arr = [];
 	let status = 0;
 	let id = null;
+	let isScrolling = false;
+	let scrollTimer;
 
 	onMount(() => {
 		request.onsuccess = (event) => {
@@ -232,19 +234,21 @@ function installPwa() {
 	}
 
 	function viewPage(event) {
-		let viewer = new Viewer({
-			target: document.body,
-			props: {
-				id: event.detail.id,
-				db: db
-			}
-		});
-		viewer.$set({
-			context: viewer
-		});
-		viewer.$on("modify", (event) => {
-			createPage(event);
-		});
+		if(!isScrolling){
+			let viewer = new Viewer({
+				target: document.body,
+				props: {
+					id: event.detail.id,
+					db: db
+				}
+			});
+			viewer.$set({
+				context: viewer
+			});
+			viewer.$on("modify", (event) => {
+				createPage(event);
+			});
+		}
 	}
 
 	function destroy(id) {
@@ -270,27 +274,29 @@ function installPwa() {
 	}
 
 	function contextualMenu(event) {
-		event.preventDefault();
-		window.navigator.vibrate(100);
-		let menu = new ContextualMenu({
-			target: document.body,
-			props: {
-				id: event.detail.id,
-				title: event.detail.title
-			}
-		});
-		menu.$set({
-			context: menu
-		});
-		menu.$on("open", (event) => {
-			viewPage(event);
-		});
-		menu.$on("modify", (event) => {
-			createPage(event);
-		});
-		menu.$on("destroy", (event) => {
-			destroy(event.detail.id);
-		});
+		if(!isScrolling){
+			event.preventDefault();
+			window.navigator.vibrate(100);
+			let menu = new ContextualMenu({
+				target: document.body,
+				props: {
+					id: event.detail.id,
+					title: event.detail.title
+				}
+			});
+			menu.$set({
+				context: menu
+			});
+			menu.$on("open", (event) => {
+				viewPage(event);
+			});
+			menu.$on("modify", (event) => {
+				createPage(event);
+			});
+			menu.$on("destroy", (event) => {
+				destroy(event.detail.id);
+			});
+		}
 		return false;
 	}
 
@@ -319,6 +325,16 @@ function installPwa() {
 		theme.setAttribute("content", color);
 		ms_theme.setAttribute("content", color);
 	}
+
+	document.body.addEventListener('scroll', function ( event ) {
+		isScrolling = true;
+		console.log(isScrolling);
+		window.clearTimeout( scrollTimer );
+		scrollTimer = setTimeout(function() {
+			isScrolling = false;
+			console.log(isScrolling);
+		}, 500);
+	}, false);
 
 	Array.prototype.val = function (p) {
 		if(typeof p === "number"){
@@ -396,7 +412,7 @@ function installPwa() {
 	}
 
 	:global(.svlt-grid-item){
-    touch-action: auto !important;
+    touch-action: manipulation !important;
   }
 
 	:global(body.dark){

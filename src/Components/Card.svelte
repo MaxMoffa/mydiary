@@ -23,7 +23,7 @@
   }
 
   function startClicking(event){
-    event.preventDefault();
+    //event.preventDefault();
     opacity = 0.6;
     interval = setTimeout(function () {
       isClick = false;
@@ -39,7 +39,7 @@
   }
 
   function stopClicking(event) {
-    event.preventDefault();
+    //event.preventDefault();
     opacity = 1;
     clearTimeout(interval);
     if(isClick){
