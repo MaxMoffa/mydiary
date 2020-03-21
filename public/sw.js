@@ -8,13 +8,21 @@
 
 //Configuration
 
-const CACHE_VERSION = "1.0.3";
+const CACHE_VERSION = "1.0.4";
 const CACHE_NAME = "MyDiary:" + CACHE_VERSION;
 const CACHE_FILES = [
   "./",
   "./index.html",
   "./manifest.json",
   "./global.css",
+  "./media/cover/diagmonds.png",
+  "./media/cover/inspiration-geometry.png",
+  "./media/cover/3px-tile.png",
+  "./media/cover/60-lines.png",
+  "./media/cover/axiom-pattern.png",
+  "./media/cover/basketball.png",
+  "./media/cover/cartographer.png",
+  "./media/cover/cubes.png",
   "./media/image/loading.gif",
   "./media/image/error.gif",
   "./media/image/empty.gif",
@@ -22,7 +30,7 @@ const CACHE_FILES = [
   "./build/bundle.css",
   "./build/bundle.css.map",
   "./build/bundle.js",
-  "./build/bundle.js.map"
+  "./build/bundle.js.map",
 ]
 
 //Functions

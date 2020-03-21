@@ -37,9 +37,11 @@
       theme: 'snow'
     });
     editor.on('text-change', function(delta, oldDelta, source) {
-      if (source == 'user') {
+      if (source === 'user' && oldDelta.ops.length !== 1 && oldDelta.ops[0].insert !== "\n") {
         changes = true;
       }
+      if((editor.getLength()-2) === delta.ops[0].retain)
+        document.querySelector("#creator-main").scrollTo(0,document.querySelector("#creator-main").scrollHeight);
     });
 
     if(db !== null && id !== null){
@@ -62,6 +64,7 @@
   });
 
   onDestroy(() => {
+    document.body.style.overflow = "auto";
     if(id){
       dispatch("destroy", {
         id: id
@@ -81,12 +84,10 @@
       alert.$on("answer", (event) => {
         if(event.detail.response){
           if(context) context.$destroy();
-          document.body.style.overflow = "auto";
         }
       });
     }else {
       if(context) context.$destroy();
-      document.body.style.overflow = "auto";
     }
   }
 
@@ -120,8 +121,15 @@
   }
 
   function scollEvent(event) {
-    if(event.target.scrollTop > 180) document.querySelector(".ql-toolbar").style.position = "fixed";
-    else document.querySelector(".ql-toolbar").style.position = "static";
+    let toolbar = document.querySelector(".ql-toolbar");
+    let editor = document.querySelector("#editor-creator");
+    if(event.target.scrollTop > 180){
+      editor.style.marginTop = (toolbar.offsetHeight + 16) + "px";
+      toolbar.style.position = "fixed";
+    }else{
+      editor.style.marginTop = "0";
+      toolbar.style.position = "static";
+    }
   }
 
   function alertUser(text) {
@@ -138,7 +146,7 @@
   }
 </script>
 
-<main on:scroll={scollEvent}>
+<main id="creator-main" on:scroll={scollEvent}>
   {#if window.document.body.classList.contains('dark')}
     <Fab on:click={closePage} fontSize="32px" margin="16px" color="#fff" background="#212121" shadow="#212121" icon="arrow_back" position="top-left" />
     <Fab on:click={saveNote} fontSize="32px" margin="16px" color="#fff" background="#212121" shadow="#212121" icon="save" position="top-right" />
@@ -231,6 +239,10 @@
     border-color: #fff;
     background-color: #fff8e1 !important;
     z-index: 4 !important;
+  }
+
+  :global(.ql-editor){
+    margin-bottom: 64px;
   }
 
   :global(body.dark) :global(.ql-toolbar){

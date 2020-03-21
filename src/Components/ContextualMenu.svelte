@@ -6,37 +6,53 @@
   export let context = null;
   export let title = "What's next?";
 
+  let isRealClick = false;
+
   function close(event) {
-    if(context && isMain(event)) context.$destroy();
+    if(context && isMain(event) && isRealClick) context.$destroy();
+    isRealClick = true;
   }
 
   function open() {
-    dispatch("open", {
-      id: id,
-    });
-    if(context) context.$destroy();
+    if(isRealClick){
+      dispatch("open", {
+        id: id,
+      });
+      if(context) context.$destroy();
+    }
+    isRealClick = true;
   }
 
   function modify() {
-    dispatch("modify", {
-      id: id,
-    });
-    if(context) context.$destroy();
+    if(isRealClick){
+      dispatch("modify", {
+        id: id,
+      });
+      if(context) context.$destroy();
+    }
+    isRealClick = true;
   }
 
   function destroy() {
-    dispatch("destroy", {
-      id: id,
-    });
-    if(context) context.$destroy();
+    if(isRealClick){
+      dispatch("destroy", {
+        id: id,
+      });
+      if(context) context.$destroy();
+    }
+    isRealClick = true;
   }
 
   function isMain(e) {
     return e.target.localName === "main";
   }
+
+  function stopClicking(){
+    isRealClick = true;
+  }
 </script>
 
-<main on:click={close}>
+<main on:touchend={stopClicking} on:mouseup={stopClicking} on:click={close}>
   <div class="dialog">
     <div class="title">{title}</div>
     <div class="option">
@@ -61,9 +77,9 @@
 
   main{
     display: flex;
-    position: absolute;
-    width: 100%;
-    height: 100%;
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
     top: 0;
     left: 0;
     z-index: 2;

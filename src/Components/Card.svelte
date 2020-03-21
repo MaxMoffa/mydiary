@@ -7,6 +7,7 @@
   export let id = -1;
   export let background = "#0097a7";
   export let color = "#fff";
+  export let texture = "";
   let opacity = 1;
   let interval;
   let isClick = true;
@@ -58,7 +59,7 @@
 
 </script>
 
-<main on:touchend={stopClicking} on:touchstart={startClicking} on:mouseup={stopClicking} on:mousedown={startClicking} style="background-color: {background}; color: {color}; opacity: {opacity}">
+<main on:touchend={stopClicking} on:touchstart={startClicking} on:mouseup={stopClicking} on:mousedown={startClicking} style="background-color: {background}; background-image: url('{texture}'); color: {color}; opacity: {opacity}">
   <div>
     <div class="title">{title}</div>
     <div class="date">{date}</div>

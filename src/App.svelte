@@ -95,6 +95,16 @@ function installPwa() {
 	const breakpoints = [
 		[1000, 2, 3],
 	];
+	const texture = [
+		"../media/cover/diagmonds.png",
+		"../media/cover/inspiration-geometry.png",
+		"../media/cover/3px-tile.png",
+		"../media/cover/60-lines.png",
+		"../media/cover/axiom-pattern.png",
+		"../media/cover/basketball.png",
+		"../media/cover/cartographer.png",
+		"../media/cover/cubes.png",
+	];
 	const colors = [
 		"#b71c1c",
 		"#880e4f",
@@ -147,7 +157,6 @@ function installPwa() {
 		let objectStore = db.transaction(["pages"]).objectStore("pages");
 		objectStore.openCursor().onsuccess = function(event) {
 			cursor = event.target.result;
-			if(counter === 15) counter = 0;
 			if (cursor) {
 				let item = gridHelp.item({
 					w: 1,
@@ -157,7 +166,8 @@ function installPwa() {
 					id: cursor.key,
 					date: cursor.value.date,
 					title: cursor.value.title,
-					background: (colors[counter]),
+					background: colors.val(counter),
+					texture: texture.val(counter),
 					static: true,
 					resizable: false,
 				});
@@ -283,13 +293,21 @@ function installPwa() {
 		theme.setAttribute("content", color);
 		ms_theme.setAttribute("content", color);
 	}
+
+	Array.prototype.val = function (p) {
+		if(typeof p === "number"){
+			while(p >= this.length) p -= this.length;
+			return this[p];
+		}
+		return undefined;
+	};
 </script>
 
 <main>
 	<Header />
 	{#if status === 2}
 		<Grid useTransform {breakpoints} {items_arr} bind:items={items_arr} cols={4} let:item rowHeight={80} gap={5}>
-			<Card title={item.title} date={item.date} id={item.id} background={item.background} on:click={viewPage} on:longpress={contextualMenu} on:contextmenu={contextualMenu} />
+			<Card title={item.title} date={item.date} id={item.id} background={item.background} texture={item.texture} on:click={viewPage} on:longpress={contextualMenu} on:contextmenu={contextualMenu} />
 		</Grid>
 	{:else if status === 0}
 		<ImageElement class="loading" src="./media/image/loading.gif" alt="Loading..." />
@@ -308,7 +326,7 @@ function installPwa() {
 		{#if deferredPrompt !== null}
 			<Fab fontSize="32px" margin="6px" color="#000" background="#fff8e1" shadow="#fff8e1" icon="get_app" position="top-left" on:click={installPwa} />
 		{/if}
-    <Fab positionType="fixed" on:click={createPage} fontSize="32px" shadow="#fff8e1" icon="create" />
+    <Fab positionType="fixed" on:click={createPage} fontSize="32px" icon="create" />
     <Fab fontSize="32px" margin="6px" color="#000" background="#fff8e1" shadow="#fff8e1" icon="settings" position="top-right" on:click={openOption} />
   {/if}
 </main>

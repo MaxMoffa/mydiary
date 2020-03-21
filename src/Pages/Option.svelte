@@ -59,7 +59,7 @@
   {/if}
   <div class="body">
     <div class="content">
-      <div class="title">Settings</div>
+      <ImageElement src="./media/icons-web-app/ms-icon-310x310.png" text="Settings" />
       <div class="options">
         <div class="option">
           <label for="theme-selector">Theme</label>
