@@ -11,13 +11,15 @@
   export let context = null;
   let theme = localStorage.getItem("theme-mode-diary");
   let version = "...";
-  if(navigator.serviceWorker.controller){
-    navigator.serviceWorker.addEventListener('message', event => {
-      version = event.data.version;
-    });
-    navigator.serviceWorker.controller.postMessage({
-      action: "getVersion"
-    });
+  if ('serviceWorker' in navigator) {
+    if(navigator.serviceWorker.controller){
+      navigator.serviceWorker.addEventListener('message', event => {
+        version = event.data.version;
+      });
+      navigator.serviceWorker.controller.postMessage({
+        action: "getVersion"
+      });
+    }
   }
 
   function closePage() {

@@ -60,15 +60,14 @@
 				console.log('ServiceWorker registration failed: ', err);
 			});
 		});
+		navigator.serviceWorker.addEventListener('controllerchange', function () {
+			if (refreshing) return;
+			window.location.reload();
+			refreshing = true;
+		});
 	}else {
 		console.log("Ops! Il tuo browser sembra non essere compatibile con i service worker");
 	}
-
-navigator.serviceWorker.addEventListener('controllerchange', function () {
-	if (refreshing) return;
-	window.location.reload();
-	refreshing = true;
-});
 
 function installPwa() {
  deferredPrompt.prompt();
@@ -142,7 +141,7 @@ function installPwa() {
 				let store = db.transaction(["pages"], "readwrite").objectStore("pages");
 				let tutorial = store.put({
 					title: "Tutorial 🔥",
-		      body: "<p>Welcome to <span class=\"ql-size-large\">My Diary! 🤩</span></p><p>Your first virtual diary, here are some <span style=\"background-color: rgb(102, 185, 102);\">tips and tricks</span> for you in order to better use this app:</p><ul><li><strong>Long press</strong> (or <strong>Right click</strong>) on a note will display a contextual menu</li><li><strong>Single click</strong> on a note will open it in reading mode</li><li>You can set a <strong>dark theme</strong> in the option menu</li><li>In order to <strong>create a note</strong> you have to access the Creator page by clicking on the button in the bottom</li><li>You can <strong>install this app</strong> by clicking on the button at the top right corner of the home (depends on the browser compatibility)</li></ul><p>For any info you can check my <a href=\"https://dev.to/maxmoffa\" target=\"_blank\" style=\"background-color: rgb(235, 214, 255);\">dev profile</a> or the page of the repository on <a href=\"https://github.com/MaxMoffa/MyDiary\" target=\"_blank\" style=\"background-color: rgb(255, 255, 204);\">Github</a></p><p>If you really like this project you can <a href=\"https://www.buymeacoffee.com/ABxD3lK\" target=\"_blank\" style=\"background-color: rgb(255, 235, 204);\">offer me a coffee</a>, every coffee will be used in order to work on projects like this one💪</p>",
+		      body: "<p>Welcome to <span class=\"ql-size-large\">My Diary! 🤩</span></p><p>Your first virtual diary, here are some <span style=\"background-color: rgb(102, 185, 102);\">tips and tricks</span> for you in order to better use this app:</p><ul><li><strong>Long press</strong> (or <strong>Right click</strong>) on a note will display a contextual menu (<strong>Attention!</strong> On IOS this feature doesn't work at the moment)</li><li><strong>Single click</strong> on a note will open it in reading mode</li><li>You can <strong>modify/delete</strong> a note both with the contextual menu or the options in the viewer mode</li><li>You can set a <strong>dark theme</strong> in the option menu</li><li>In order to <strong>create a note</strong> you have to access the Creator page by clicking on the button in the bottom</li><li>You can <strong>install this app</strong> by clicking on the button at the top right corner of the home (depends on the browser compatibility)</li></ul><p>For any info you can check my <a href=\"https://dev.to/maxmoffa\" target=\"_blank\" style=\"background-color: rgb(235, 214, 255);\">dev profile</a> or the page of the repository on <a href=\"https://github.com/MaxMoffa/MyDiary\" target=\"_blank\" style=\"background-color: rgb(255, 255, 204);\">Github</a></p><p>If you really like this project you can <a href=\"https://www.buymeacoffee.com/ABxD3lK\" target=\"_blank\" style=\"background-color: rgb(255, 235, 204);\">offer me a coffee</a>, every coffee will be used in order to work on projects like this one💪</p>",
 		      date: new Date().toLocaleDateString(),
 				});
 				tutorial.onsuccess = function(event) {
@@ -248,10 +247,13 @@ function installPwa() {
 			viewer.$on("modify", (event) => {
 				createPage(event);
 			});
+			viewer.$on("delete", (event) => {
+				destroy(event.detail.id, event.detail.context);
+			});
 		}
 	}
 
-	function destroy(id) {
+	function destroy(id, context) {
 		let alert = new alertBox({
 			target: document.body,
 			props: {}
@@ -267,6 +269,7 @@ function installPwa() {
 					console.log(event);
 				};
 				request.onsuccess = function(event) {
+					if(context) context.$destroy();
 					refreshList();
 				};
 			}

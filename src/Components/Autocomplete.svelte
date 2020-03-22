@@ -39,15 +39,27 @@
     user-select: text;
   }
 
+  .search-bar:focus::-webkit-input-placeholder{
+    color: transparent;
+  }
+
+  .search-bar:focus::-ms-input-placeholder{
+    color: transparent;
+  }
+
+  .search-bar:focus::placeholder{
+    color: transparent;
+  }
+
   :global(body.dark) .search-bar{
     color: #fff;
   }
 
-  :global(body.dark) .search-bar::-webkit-input-placeholder { /* Edge */
+  :global(body.dark) .search-bar::-webkit-input-placeholder {
     color: grey;
   }
 
-  :global(body.dark) .search-bar:-ms-input-placeholder { /* Internet Explorer 10-11 */
+  :global(body.dark) .search-bar:-ms-input-placeholder {
     color: grey;
   }
 

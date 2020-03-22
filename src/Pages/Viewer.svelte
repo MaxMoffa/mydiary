@@ -1,6 +1,6 @@
 <script>
   import ImageElement from '../Components/ImageElement.svelte';
-  import {createEventDispatcher} from 'svelte';
+  import {createEventDispatcher, onDestroy} from 'svelte';
   import Fab from '../Components/Fab.svelte';
   import Snackbar from '../Components/Snackbar.svelte';
 
@@ -16,6 +16,10 @@
   let date = "";
   let body = "";
   let status = 0;
+
+  onDestroy(() => {
+    document.body.style.overflow = "auto";
+  });
 
   if(db !== null){
     let objectStore = db.transaction(["pages"], "readwrite").objectStore("pages");
@@ -44,7 +48,6 @@
 
   function closePage() {
     if(context) context.$destroy();
-    document.body.style.overflow = "auto";
   }
 
   function modify() {
@@ -52,6 +55,13 @@
       id: id
     })
     closePage();
+  }
+
+  function deleteThis() {
+    dispatch("delete", {
+      id: id,
+      context: context,
+    })
   }
 
   function alertUser(text) {
@@ -71,10 +81,12 @@
 <main>
   {#if window.document.body.classList.contains('dark')}
     <Fab on:click={closePage} fontSize="32px" margin="16px" color="#fff" background="#212121" shadow="#212121" icon="arrow_back" position="top-left" />
-    <Fab on:click={modify} fontSize="32px" margin="16px" color="#fff" background="#212121" shadow="#212121" icon="edit" position="top-right" />
+    <Fab on:click={deleteThis} fontSize="32px" margin="16px" color="#fff" background="#212121" shadow="#212121" icon="delete" position="top-right" />
+    <Fab positionType="fixed" on:click={modify} fontSize="32px" color="#000" background="#fff8e1" shadow="#000" icon="edit" />
   {:else}
     <Fab on:click={closePage} fontSize="32px" margin="16px" color="#000" background="#fff8e1" shadow="#fff8e1" icon="arrow_back" position="top-left" />
-    <Fab on:click={modify} fontSize="32px" margin="16px" color="#000" background="#fff8e1" shadow="#fff8e1" icon="edit" position="top-right" />
+    <Fab on:click={deleteThis} fontSize="32px" margin="16px" color="#000" background="#fff8e1" shadow="#fff8e1" icon="delete" position="top-right" />
+    <Fab positionType="fixed" on:click={modify} fontSize="32px" icon="edit" />
   {/if}
   <div class="body">
     <div class="content">
