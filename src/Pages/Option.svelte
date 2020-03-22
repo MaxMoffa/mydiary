@@ -45,10 +45,6 @@
   function openDonation() {
     window.open("https://www.buymeacoffee.com/ABxD3lK");
   }
-
-  function readInfo() {
-    window.open("https://maxmoffa.github.io/MyDiary/");
-  }
 </script>
 
 <main>
@@ -88,12 +84,6 @@
           <label for="theme-selector">Donations</label>
           <div>
             <Button title="Buy me a coffee ☕" background="#ff813f" on:click={openDonation} />
-          </div>
-        </div>
-        <div class="option">
-          <label for="theme-selector">Information</label>
-          <div>
-            <Button title="Read something technical" background="#283593" on:click={readInfo} />
           </div>
         </div>
       </div>

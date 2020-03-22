@@ -142,6 +142,8 @@
     margin-top: 64px;
     margin-bottom: 64px;
     font-size: 20px;
+    font-family: Arial;
+    line-height: 28.4px;
   }
 
   :global(.ql-size-large){

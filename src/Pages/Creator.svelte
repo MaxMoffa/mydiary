@@ -9,7 +9,7 @@
 
   document.body.style.overflow = "hidden";
 
-  var toolbarOptions = [
+  let toolbarOptions = [
   ['bold', 'italic', 'underline', 'strike'],
   ['blockquote', 'code-block'],
   [{ 'list': 'ordered'}, { 'list': 'bullet' }],
@@ -28,6 +28,7 @@
   let editor = null;
   let title = "";
   let changes = false;
+  let isToolbarFloating = false;
 
   onMount(() => {
     editor = new Quill('#editor-creator', {
@@ -123,13 +124,26 @@
 
   function scollEvent(event) {
     let toolbar = document.querySelector(".ql-toolbar");
-    let editor = document.querySelector("#editor-creator");
-    if(event.target.scrollTop > 180){
-      editor.style.marginTop = (toolbar.offsetHeight + 45) + "px";
-      toolbar.style.position = "fixed";
+    if(event.target.scrollTop > 300){
+      if(!isToolbarFloating){
+        let floatingToolbar = toolbar.cloneNode(true);
+        let floatingToolbarButtons = floatingToolbar.querySelectorAll("button");
+        let toolbarButtons = toolbar.querySelectorAll("button");
+        floatingToolbarButtons.forEach((item, i) => {
+          item.onclick = function() {
+            toolbarButtons[i].click();
+            item.classList = toolbarButtons[i].classList;
+          }
+        });
+        floatingToolbar.classList.add("floatingToolbar");
+        document.querySelector("#creator-main .content").append(floatingToolbar);
+        isToolbarFloating = true;
+      }
     }else{
-      editor.style.marginTop = "0";
-      toolbar.style.position = "static";
+      document.querySelectorAll(".floatingToolbar").forEach((item, i) => {
+        item.parentNode.removeChild(item);
+      });
+      isToolbarFloating = false;
     }
   }
 
@@ -243,6 +257,7 @@
   }
 
   :global(.ql-editor){
+    padding: 0 !important;
     margin-bottom: 64px;
   }
 
@@ -252,5 +267,10 @@
 
   :global(body.dark) :global(.ql-editor)::before {
     color: grey !important;
+  }
+
+  :global(.floatingToolbar){
+    position: fixed;
+    top: 10px;
   }
 </style>

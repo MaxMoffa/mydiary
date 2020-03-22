@@ -67,6 +67,7 @@
 </main>
 
 <style>
+
   main{
     display: flex;
     width: 100% !important;
@@ -90,10 +91,12 @@
 
   .title{
     font-size: 20px;
+    user-select: none;
   }
 
   .date{
     margin-bottom: 16px;
     font-size: 10px;
+    user-select: none;
   }
 </style>
