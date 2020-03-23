@@ -27,6 +27,7 @@
 
   let editor = null;
   let title = "";
+  let color = "";
   let changes = false;
   let isToolbarFloating = false;
 
@@ -57,6 +58,10 @@
         if(data !== undefined){
           title = data.title;
           date = data.date;
+          if(data.color){
+            color = data.color;
+            document.querySelector(".color-selector select").style.background = color;
+          }
           id = data.id;
           document.querySelector(".ql-editor").innerHTML = data.body;
         }
@@ -108,6 +113,7 @@
       body: text,
       date: date,
     };
+    if(color) item.color = color;
     if(id !== null) item.id = id;
     let objectStore = db.transaction(["pages"], "readwrite").objectStore("pages");
     let request = objectStore.put(item);
@@ -124,7 +130,7 @@
   function scollEvent(event) {
     let toolbar = document.querySelector(".ql-toolbar");
     let height = toolbar.offsetHeight + 48;
-    if(event.target.scrollTop > 180){
+    if(event.target.scrollTop > 300){
       if(!isToolbarFloating){
         // let floatingToolbar = toolbar.cloneNode(true);
         // let floatingToolbarButtons = floatingToolbar.querySelectorAll("button");
@@ -163,6 +169,11 @@
       context: snackbar
     });
   }
+
+  function changeSelect(e) {
+    e.target.style.background = e.target.value;
+    changes = true;
+  }
 </script>
 
 <main id="creator-main" on:scroll={scollEvent}>
@@ -176,6 +187,26 @@
   <div class="body">
     <div class="content">
       <input bind:value={title} class="title" type="text" placeholder="Title" maxlength="60">
+      <div class="color-selector">
+        <label for="color">Select a color</label>
+        <select id="color" bind:value={color} on:change={changeSelect}>
+          <option value="#b71c1c" style="background-color: #b71c1c"></option>
+          <option value="#880e4f" style="background-color: #880e4f"></option>
+          <option value="#4a148c" style="background-color: #4a148c"></option>
+          <option value="#311b92" style="background-color: #311b92"></option>
+          <option value="#1a237e" style="background-color: #1a237e"></option>
+          <option value="#0d47a1" style="background-color: #0d47a1"></option>
+          <option value="#01579b" style="background-color: #01579b"></option>
+          <option value="#006064" style="background-color: #006064"></option>
+          <option value="#004d40" style="background-color: #004d40"></option>
+          <option value="#1b5e20" style="background-color: #1b5e20"></option>
+          <option value="#33691e" style="background-color: #33691e"></option>
+          <option value="#827717" style="background-color: #827717"></option>
+          <option value="#e65100" style="background-color: #e65100"></option>
+          <option value="#bf360c" style="background-color: #bf360c"></option>
+          <option value="#3e2723" style="background-color: #3e2723"></option>
+        </select>
+      </div>
       <div id="editor-creator" class="text"></div>
     </div>
   </div>
@@ -233,6 +264,16 @@
 
     background-color: transparent;
     border: 0;
+  }
+
+  .color-selector{
+    padding: 16px;
+  }
+
+  .color-selector select{
+    width: 128px;
+    cursor: pointer;
+    background: transparent;
   }
 
   :global(body.dark) .title{

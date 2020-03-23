@@ -191,7 +191,7 @@ function installPwa() {
 						id: cursor.key,
 						date: cursor.value.date,
 						name: cursor.value.title,
-						background: colors.val(counter),
+						background: (cursor.value.color ? cursor.value.color : colors.val(counter)),
 						texture: texture.val(counter),
 						static: true,
 						resizable: false,

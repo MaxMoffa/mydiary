@@ -152,10 +152,14 @@
 
   .text{
     margin-top: 64px;
-    margin-bottom: 64px;
+    margin-bottom: 100px;
     font-size: 20px;
     font-family: Arial;
     line-height: 28.4px;
+    -webkit-user-select: text;
+    -moz-user-select: text;
+    -ms-user-select: text;
+    user-select: text;
   }
 
   :global(.ql-size-large){
@@ -168,6 +172,22 @@
 
   :global(.ql-size-small){
     font-size: 0.75em;
+  }
+
+  :global(.ql-align-center){
+    text-align: center;
+  }
+
+  :global(.ql-align-left){
+    text-align: left;
+  }
+
+  :global(.ql-align-right){
+    text-align: right;
+  }
+
+  :global(.ql-align-justify){
+    text-align: justify;
   }
 
   :global(.ql-syntax){
