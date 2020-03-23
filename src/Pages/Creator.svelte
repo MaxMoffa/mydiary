@@ -4,6 +4,7 @@
   import Fab from '../Components/Fab.svelte';
   import Snackbar from '../Components/Snackbar.svelte';
   import alertBox from '../Components/alertBox.svelte';
+  import ColorSelector from '../Components/ColorSelector.svelte';
 
   const dispatch = createEventDispatcher();
 
@@ -60,7 +61,7 @@
           date = data.date;
           if(data.color){
             color = data.color;
-            document.querySelector(".color-selector select").style.background = color;
+            document.querySelector(".color-selector #color").style.background = color;
           }
           id = data.id;
           document.querySelector(".ql-editor").innerHTML = data.body;
@@ -170,9 +171,20 @@
     });
   }
 
-  function changeSelect(e) {
-    e.target.style.background = e.target.value;
-    changes = true;
+  function changeSelect() {
+    let colorSelector = new ColorSelector({
+    	target: document.body,
+    	props: {
+    	}
+    });
+    colorSelector.$set({
+      context: colorSelector
+    });
+    colorSelector.$on("change", (e) => {
+      color = e.detail.color;
+      document.querySelector(".color-selector #color").style.background = color;
+      changes = true;
+    });
   }
 </script>
 
@@ -189,23 +201,7 @@
       <input bind:value={title} class="title" type="text" placeholder="Title" maxlength="60">
       <div class="color-selector">
         <label for="color">Select a color</label>
-        <select id="color" bind:value={color} on:change={changeSelect}>
-          <option value="#b71c1c" style="background-color: #b71c1c"></option>
-          <option value="#880e4f" style="background-color: #880e4f"></option>
-          <option value="#4a148c" style="background-color: #4a148c"></option>
-          <option value="#311b92" style="background-color: #311b92"></option>
-          <option value="#1a237e" style="background-color: #1a237e"></option>
-          <option value="#0d47a1" style="background-color: #0d47a1"></option>
-          <option value="#01579b" style="background-color: #01579b"></option>
-          <option value="#006064" style="background-color: #006064"></option>
-          <option value="#004d40" style="background-color: #004d40"></option>
-          <option value="#1b5e20" style="background-color: #1b5e20"></option>
-          <option value="#33691e" style="background-color: #33691e"></option>
-          <option value="#827717" style="background-color: #827717"></option>
-          <option value="#e65100" style="background-color: #e65100"></option>
-          <option value="#bf360c" style="background-color: #bf360c"></option>
-          <option value="#3e2723" style="background-color: #3e2723"></option>
-        </select>
+        <div id="color" on:click={changeSelect}></div>
       </div>
       <div id="editor-creator" class="text"></div>
     </div>
@@ -270,11 +266,17 @@
     padding: 16px;
   }
 
-  .color-selector select{
+  #color{
     width: 128px;
+    height: 32px;
+    border: 1px solid #000;
     cursor: pointer;
     background: transparent;
   }
+
+  :global(body.dark) #color{
+		border: 1px solid #fff;
+	}
 
   :global(body.dark) .title{
 		color: #fff;
