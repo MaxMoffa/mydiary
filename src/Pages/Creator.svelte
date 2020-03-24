@@ -7,6 +7,23 @@
   import ColorSelector from '../Components/ColorSelector.svelte';
 
   const dispatch = createEventDispatcher();
+  const colors = [
+    "#b71c1c",
+    "#880e4f",
+    "#4a148c",
+    "#311b92",
+    "#1a237e",
+    "#0d47a1",
+    "#01579b",
+    "#006064",
+    "#004d40",
+    "#1b5e20",
+    "#33691e",
+    "#827717",
+    "#e65100",
+    "#bf360c",
+    "#3e2723",
+  ];
 
   document.body.style.overflow = "hidden";
 
@@ -29,6 +46,7 @@
   let editor = null;
   let title = "";
   let color = "";
+  let texture = null;
   let changes = false;
   let isToolbarFloating = false;
 
@@ -62,6 +80,9 @@
           if(data.color){
             color = data.color;
             document.querySelector(".color-selector #color").style.background = color;
+          }
+          if(data.texture){
+            texture = data.texture;
           }
           id = data.id;
           document.querySelector(".ql-editor").innerHTML = data.body;
@@ -113,8 +134,10 @@
       title: title,
       body: text,
       date: date,
+      color: (color !== "" ? color : colors[Math.round(Math.random() * 15)]),
+      texture: (texture ? texture : Math.round(Math.random() * 8)),
     };
-    if(color) item.color = color;
+
     if(id !== null) item.id = id;
     let objectStore = db.transaction(["pages"], "readwrite").objectStore("pages");
     let request = objectStore.put(item);

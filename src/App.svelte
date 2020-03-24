@@ -192,7 +192,7 @@ function installPwa() {
 						date: cursor.value.date,
 						name: cursor.value.title,
 						background: (cursor.value.color ? cursor.value.color : colors.val(counter)),
-						texture: texture.val(counter),
+						texture: (cursor.value.texture ? texture.val(cursor.value.texture) : texture.val(counter)),
 						static: true,
 						resizable: false,
 					});
@@ -331,7 +331,6 @@ function installPwa() {
 
 	document.body.addEventListener('scroll', function ( event ) {
 		isScrolling = true;
-		console.log(isScrolling);
 		window.clearTimeout( scrollTimer );
 		scrollTimer = setTimeout(function() {
 			isScrolling = false;
@@ -412,6 +411,10 @@ function installPwa() {
 	:global(body.dark) :global(::-webkit-scrollbar-thumb){
 		background-color: #fff8e1;
 		border-right: 1px solid #212121;
+	}
+
+	:global(.svlt-grid-container){
+		margin-bottom: 100px;
 	}
 
 	:global(.svlt-grid-item){

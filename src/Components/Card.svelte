@@ -12,8 +12,9 @@
   let interval;
   let isClick = true;
 
-  window.oncontextmenu = function (){
-    return false;
+  window.oncontextmenu = function (e){
+    if(e.target.classList.contains("card-element") || e.target.classList.contains("contextmenu-element")) 
+      e.preventDefault();
   }
 
   function click() {
@@ -59,10 +60,10 @@
 
 </script>
 
-<main on:touchend={stopClicking} on:touchstart={startClicking} on:mouseup={stopClicking} on:mousedown={startClicking} style="background-color: {background}; background-image: url('{texture}'); color: {color}; opacity: {opacity}">
-  <div>
-    <div class="title">{title}</div>
-    <div class="date">{date}</div>
+<main class="card-element" on:touchend={stopClicking} on:touchstart={startClicking} on:mouseup={stopClicking} on:mousedown={startClicking} style="background-color: {background}; background-image: url('{texture}'); color: {color}; opacity: {opacity}">
+  <div class="card-element">
+    <div class="title card-element">{title}</div>
+    <div class="date card-element">{date}</div>
   </div>
 </main>
 

@@ -52,18 +52,18 @@
   }
 </script>
 
-<main on:touchend={stopClicking} on:mouseup={stopClicking} on:click={close}>
-  <div class="dialog">
-    <div class="title">{title}</div>
-    <div class="option">
-      <div on:click={open}>
-        <span>Read this page</span>
+<main class="contextmenu-element" on:touchend={stopClicking} on:mouseup={stopClicking} on:click={close}>
+  <div class="dialog contextmenu-element">
+    <div class="title contextmenu-element">{title}</div>
+    <div class="option contextmenu-element">
+      <div class="contextmenu-element" on:click={open}>
+        <span class="contextmenu-element">Read this page</span>
       </div>
-      <div on:click={modify}>
-        <span>Change something</span>
+      <div class="contextmenu-element" on:click={modify}>
+        <span class="contextmenu-element">Change something</span>
       </div>
-      <div on:click={destroy}>
-        <span>Destroy this page</span>
+      <div class="contextmenu-element" on:click={destroy}>
+        <span class="contextmenu-element">Destroy this page</span>
       </div>
     </div>
   </div>
