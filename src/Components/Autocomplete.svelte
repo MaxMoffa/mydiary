@@ -4,16 +4,26 @@
 
   export let placeholder = "Search 🔎";
   let query = "";
+  let input_bar;
 
   function search(text) {
     dispatch("change",{
       query: text.target.value,
     });
   }
+
+  function focus() {
+    input_bar.placeholder = "";
+  }
+
+  function blur() {
+    input_bar.placeholder = "Search 🔎";
+  }
+
 </script>
 
 <main>
-  <input class="search-bar" on:input={search} bind:value={query} type="text" placeholder={placeholder}>
+  <input bind:this={input_bar} class="search-bar" on:focus={focus} on:blur={blur} on:input={search} bind:value={query} type="text" placeholder={placeholder}>
 </main>
 
 <style>
@@ -37,18 +47,6 @@
     background-color: transparent;
     text-align: center;
     user-select: text;
-  }
-
-  .search-bar:focus::-webkit-input-placeholder{
-    color: transparent;
-  }
-
-  .search-bar:focus::-ms-input-placeholder{
-    color: transparent;
-  }
-
-  .search-bar:focus::placeholder{
-    color: transparent;
   }
 
   :global(body.dark) .search-bar{

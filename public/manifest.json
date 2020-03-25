@@ -2,7 +2,7 @@
   "name": "My Diary",
   "short_name": "My Diary",
   "background_color": "#fff8e1",
-  "theme_color": "#fff8e1",
+  "theme_color": "#3e2723",
   "display": "standalone",
   "orientation": "portrait",
   "scope": "./",
