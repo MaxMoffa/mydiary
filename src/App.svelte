@@ -279,7 +279,7 @@ function installPwa() {
 	function contextualMenu(event) {
 		if(!isScrolling){
 			event.preventDefault();
-			window.navigator.vibrate(100);
+			if('vibrate' in window.navigator) window.navigator.vibrate(100);
 			let menu = new ContextualMenu({
 				target: document.body,
 				props: {
