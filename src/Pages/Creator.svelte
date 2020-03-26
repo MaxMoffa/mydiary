@@ -156,25 +156,11 @@
     let height = toolbar.offsetHeight + 48;
     if(event.target.scrollTop > 300){
       if(!isToolbarFloating){
-        // let floatingToolbar = toolbar.cloneNode(true);
-        // let floatingToolbarButtons = floatingToolbar.querySelectorAll("button");
-        // let toolbarButtons = toolbar.querySelectorAll("button");
-        // floatingToolbarButtons.forEach((item, i) => {
-        //   item.onclick = function() {
-        //     toolbarButtons[i].click();
-        //     item.classList = toolbarButtons[i].classList;
-        //   }
-        // });
-        // floatingToolbar.classList.add("floatingToolbar");
-        // document.querySelector("#creator-main .content").append(floatingToolbar);
         isToolbarFloating = true;
         document.querySelector(".ql-editor").style.marginTop = height + "px";
         toolbar.style.position = "fixed";
       }
     }else{
-      // document.querySelectorAll(".floatingToolbar").forEach((item, i) => {
-      //   item.parentNode.removeChild(item);
-      // });
       document.querySelector(".ql-editor").style.marginTop = "32px";
       toolbar.style.position = "static";
       isToolbarFloating = false;

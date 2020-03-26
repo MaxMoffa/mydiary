@@ -132,4 +132,10 @@
   .option div span{
     margin: 0 8px;
   }
+
+  @media print {
+	  main {
+	    display: none;
+	  }
+	}
 </style>

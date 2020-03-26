@@ -67,4 +67,10 @@
     color: #fff8e1;
     cursor: pointer;
   }
+	
+	@media print {
+	  main {
+	    display: none;
+	  }
+	}
 </style>

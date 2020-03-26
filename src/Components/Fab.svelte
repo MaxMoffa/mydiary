@@ -81,4 +81,10 @@
     margin: 16px;
     user-select: none;
   }
+
+  @media print {
+	  main {
+	    display: none;
+	  }
+	}
 </style>

@@ -34,4 +34,10 @@
     text-align: center;
     font-family: 'Beth Ellen', cursive;
   }
+
+  @media print {
+	  main {
+	    display: none;
+	  }
+	}
 </style>

@@ -4,6 +4,8 @@
   "background_color": "#fff8e1",
   "theme_color": "#3e2723",
   "display": "standalone",
+  "categories": ["productivity", "utilities"],
+  "description": "A simple diary",
   "orientation": "portrait",
   "scope": "./",
   "start_url": "./",

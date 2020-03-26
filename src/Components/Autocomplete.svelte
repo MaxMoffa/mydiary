@@ -3,7 +3,7 @@
   const dispatch = createEventDispatcher();
 
   export let placeholder = "Search 🔎";
-  let query = "";
+  export let query = "";
   let input_bar;
 
   function search(text) {

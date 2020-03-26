@@ -47,4 +47,10 @@ main:active{
 main span{
   margin: 8px;
 }
+
+@media print {
+  main {
+    display: none;
+  }
+}
 </style>
