@@ -22,8 +22,11 @@
     }
   }
 
+  if(window.history && window.history.pushState) window.history.pushState(null, null, './#option');
+
   function closePage() {
-    if(context) context.$destroy();
+    if(window.history && window.history.pushState) window.history.back();
+    else context.$destroy();
     document.body.style.overflow = "auto";
   }
 

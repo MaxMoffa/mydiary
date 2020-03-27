@@ -20,10 +20,15 @@
 
 	let refreshing;
 	let deferredPrompt = null;
+	let context_page = null;
 
 	window.addEventListener('beforeinstallprompt', (e) => {
 		e.preventDefault();
 		deferredPrompt = e;
+	});
+
+	window.addEventListener('popstate', (e) => {
+		if(context_page !== null) context_page.$destroy();
 	});
 
 	if ('serviceWorker' in navigator) {
@@ -226,6 +231,8 @@ function installPwa() {
 				id: event.detail.id,
 			}
 		});
+
+		context_page = creator;
 		creator.$set({
 			context: creator
 		});
@@ -246,19 +253,22 @@ function installPwa() {
 					db: db
 				}
 			});
+			context_page = viewer;
 			viewer.$set({
 				context: viewer
 			});
 			viewer.$on("modify", (event) => {
-				createPage(event);
+				setTimeout(() => {
+					createPage(event);
+				}, 0);
 			});
 			viewer.$on("delete", (event) => {
-				destroy(event.detail.id, event.detail.context);
+				destroy(event.detail.id, true);
 			});
 		}
 	}
 
-	function destroy(id, context) {
+	function destroy(id, fromViewer) {
 		let alert = new alertBox({
 			target: document.body,
 			props: {}
@@ -274,7 +284,7 @@ function installPwa() {
 					console.log(event);
 				};
 				request.onsuccess = function(event) {
-					if(context) context.$destroy();
+					if(window.history && window.history.pushState && fromViewer) window.history.back();
 					refreshList();
 				};
 			}
@@ -315,10 +325,10 @@ function installPwa() {
 			}
 		});
 
+		context_page = option;
 		option.$set({
 			context: option
 		});
-
 		option.$on("changeTheme", (event) => {
 			theme = event.detail.theme;
 			if(theme === "dark") setTheme("#212121", false);

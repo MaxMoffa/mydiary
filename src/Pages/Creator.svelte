@@ -26,6 +26,7 @@
   ];
 
   document.body.style.overflow = "hidden";
+  if(window.history && window.history.pushState && !window.location.href.endsWith("creator")) window.history.pushState(null, null, './#creator');
 
   let toolbarOptions = [
   ['bold', 'italic', 'underline', 'strike'],
@@ -39,9 +40,9 @@
 ];
 
   export let db = null;
-  export let context = null;
   export let id = null;
   export let date = new Date().toLocaleDateString();
+  export let context = null;
 
   let editor = null;
   let title = "";
@@ -111,11 +112,13 @@
       });
       alert.$on("answer", (event) => {
         if(event.detail.response){
-          if(context) context.$destroy();
+          if(window.history && window.history.pushState) window.history.back();
+          else context.$destroy();
         }
       });
     }else {
-      if(context) context.$destroy();
+      if(window.history && window.history.pushState) window.history.back();
+      else context.$destroy();
     }
   }
 
@@ -143,7 +146,8 @@
     let request = objectStore.put(item);
     request.onsuccess = function(event) {
       dispatch("creation", {});
-      if(context) context.$destroy();
+      if(window.history && window.history.pushState) window.history.back();
+      else context.$destroy();
     };
     request.onerror = function(event) {
       console.log(event);

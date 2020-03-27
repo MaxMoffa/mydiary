@@ -17,6 +17,8 @@
   let body = "";
   let status = 0;
 
+  if(window.history && window.history.pushState) window.history.pushState(null, null, './#viewer');
+
   onDestroy(() => {
     document.body.style.overflow = "auto";
   });
@@ -47,20 +49,21 @@
   }
 
   function closePage() {
-    if(context) context.$destroy();
+    if(window.history && window.history.pushState) window.history.back();
+    else context.$destroy();
   }
 
   function modify() {
     dispatch("modify", {
       id: id
-    })
-    closePage();
+    });
+    if(context) context.$destroy();
+    window.history.replaceState(null, null, "/#creator");
   }
 
   function deleteThis() {
     dispatch("delete", {
       id: id,
-      context: context,
     })
   }
 
