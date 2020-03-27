@@ -58,7 +58,7 @@
       id: id
     });
     if(context) context.$destroy();
-    window.history.replaceState(null, null, "/#creator");
+    window.history.replaceState(null, null, "./#creator");
   }
 
   function deleteThis() {
