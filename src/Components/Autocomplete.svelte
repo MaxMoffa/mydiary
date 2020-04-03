@@ -47,6 +47,13 @@
     background-color: transparent;
     text-align: center;
     user-select: text;
+    transition: 1s background;
+  }
+
+  main input:focus{
+    background-color: #fff;
+    color: #000 !important;
+    transition: 1s background;
   }
 
   :global(body.dark) .search-bar{

@@ -258,9 +258,7 @@ function installPwa() {
 				context: viewer
 			});
 			viewer.$on("modify", (event) => {
-				setTimeout(() => {
-					createPage(event);
-				}, 0);
+				createPage(event);
 			});
 			viewer.$on("delete", (event) => {
 				destroy(event.detail.id, true);

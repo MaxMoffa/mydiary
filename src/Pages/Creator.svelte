@@ -26,7 +26,7 @@
   ];
 
   document.body.style.overflow = "hidden";
-  if(window.history && window.history.pushState && !window.location.href.endsWith("creator")) window.history.pushState(null, null, './#creator');
+  if(window.history && window.history.pushState && !window.location.href.endsWith("viewer")) window.history.pushState(null, null, './#creator');
 
   let toolbarOptions = [
   ['bold', 'italic', 'underline', 'strike'],
@@ -50,6 +50,10 @@
   let texture = null;
   let changes = false;
   let isToolbarFloating = false;
+  let width_content = "600px";
+
+  if(localStorage.getItem("content-width-diary"))
+    width_content = localStorage.getItem("content-width-diary");
 
   onMount(() => {
     editor = new Quill('#editor-creator', {
@@ -90,6 +94,7 @@
         }
       };
     }
+    document.querySelector(".ql-toolbar").style.display = "block";
   });
 
   onDestroy(() => {
@@ -210,8 +215,9 @@
     <Fab on:click={saveNote} fontSize="32px" margin="16px" color="#000" background="#fff8e1" shadow="#fff8e1" icon="save" position="top-right" />
   {/if}
   <div class="body">
-    <div class="content">
+    <div class="content" style="max-width: {width_content};">
       <input bind:value={title} class="title" type="text" placeholder="Title" maxlength="60">
+      <div class="date">{date}</div>
       <div class="color-selector">
         <label for="color">Select a color</label>
         <div id="color" on:click={changeSelect}></div>
@@ -264,19 +270,24 @@
 
   .content *{
     display: block;
-    margin-bottom: 16px;
+    margin: 0 16px 16px 16px;
   }
 
   .title{
-    width: 100%;
+    width: calc(100% - 16px);
     font-size: 40px;
 
     background-color: transparent;
     border: 0;
+    padding: 0;
   }
 
   .color-selector{
-    padding: 16px;
+    padding: 16px 0 16px 0;
+  }
+
+  .color-selector *{
+    margin-left: 0;
   }
 
   #color{
@@ -296,7 +307,6 @@
 	}
 
   .text{
-    margin: 0 16px;
     height: auto;
     min-height: fit-content;
     font-size: 20px;
@@ -319,7 +329,7 @@
   :global(.ql-editor){
     padding: 0 !important;
     margin-top: 32px;
-    margin-bottom: 64px;
+    margin-bottom: 100px;
   }
 
   :global(body.dark) :global(.ql-toolbar){

@@ -113,6 +113,7 @@
   }
 
   .title{
+    word-wrap: break-word;
     font-weight: 600;
   }
 

@@ -10,6 +10,9 @@
 
   export let context = null;
   let theme = localStorage.getItem("theme-mode-diary");
+  let width_content = "600px";
+  if(localStorage.getItem("content-width-diary"))
+    width_content = localStorage.getItem("content-width-diary");
   let version = "...";
   if ('serviceWorker' in navigator) {
     if(navigator.serviceWorker.controller){
@@ -37,6 +40,11 @@
       theme: theme
     })
     localStorage.setItem("theme-mode-diary", theme);
+  }
+
+  function changeWidth(e) {
+    width_content = e.target.value;
+    localStorage.setItem("content-width-diary", e.target.value);
   }
 
   function openGithub() {
@@ -69,6 +77,16 @@
             <option value="dark">Dark</option>
           </select>
         </div>
+        {#if window.innerWidth > 600}
+        <div class="option">
+          <label for="width-selector">Content width (only for large screens)</label>
+          <select on:change={changeWidth} bind:value={width_content}>
+            <option value="100%">Large</option>
+            <option value="800px">Medium</option>
+            <option value="600px">Small</option>
+          </select>
+        </div>
+        {/if}
         <div class="option">
           <label for="theme-selector">Version</label>
           <div>{version}</div>

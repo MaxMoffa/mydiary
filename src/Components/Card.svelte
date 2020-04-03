@@ -13,7 +13,7 @@
   let isClick = true;
 
   window.oncontextmenu = function (e){
-    if(e.target.classList.contains("card-element") || e.target.classList.contains("contextmenu-element")) 
+    if(e.target.classList.contains("card-element") || e.target.classList.contains("contextmenu-element"))
       e.preventDefault();
   }
 
@@ -61,7 +61,7 @@
 </script>
 
 <main class="card-element" on:touchend={stopClicking} on:touchstart={startClicking} on:mouseup={stopClicking} on:mousedown={startClicking} style="background-color: {background}; background-image: url('{texture}'); color: {color}; opacity: {opacity}">
-  <div class="card-element">
+  <div class="card-element content">
     <div class="title card-element">{title}</div>
     <div class="date card-element">{date}</div>
   </div>
@@ -88,9 +88,12 @@
   main div{
     margin-left: 6px;
     margin-right: 6px;
+    width: 100%;
   }
 
   .title{
+    width: auto;
+    word-wrap: break-word;
     font-size: 20px;
     -webkit-user-select: none;
     -moz-user-select: none;

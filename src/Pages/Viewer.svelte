@@ -16,8 +16,13 @@
   let date = "";
   let body = "";
   let status = 0;
+  let width_content = "600px";
 
-  if(window.history && window.history.pushState) window.history.pushState(null, null, './#viewer');
+  if(localStorage.getItem("content-width-diary"))
+    width_content = localStorage.getItem("content-width-diary");
+
+  if(window.history && window.history.pushState)
+    window.history.pushState(null, null, './#viewer');
 
   onDestroy(() => {
     document.body.style.overflow = "auto";
@@ -58,7 +63,6 @@
       id: id
     });
     if(context) context.$destroy();
-    window.history.replaceState(null, null, "./#creator");
   }
 
   function deleteThis() {
@@ -92,11 +96,11 @@
     <Fab positionType="fixed" on:click={modify} fontSize="32px" icon="edit" />
   {/if}
   <div class="body">
-    <div class="content">
+    <div class="content" style="max-width: {width_content};">
       {#if status === 2}
         <div class="title">{title}</div>
         <div class="date">{date}</div>
-        <div class="text">{@html body}</div>
+        <div class="text ql-editor">{@html body}</div>
       {:else if status === 0}
         <ImageElement class="loading" src="../media/image/loading.gif" alt="Loading..." />
       {:else if status === 1}
@@ -139,7 +143,6 @@
 
   .content{
     width: 100%;
-    max-width: 600px;
     height: 30px;
     margin: 0 auto;
   }
@@ -150,11 +153,14 @@
   }
 
   .title{
+    word-wrap: break-word;
     font-size: 40px;
   }
 
   .text{
-    margin-top: 64px;
+    height: auto;
+    margin-top: 22px !important;
+    padding-top: 10px !important;
     margin-bottom: 100px;
     font-size: 20px;
     font-family: Arial;
@@ -165,41 +171,21 @@
     user-select: text;
   }
 
-  :global(.ql-size-large){
-    font-size: 1.5em;
-  }
-
-  :global(.ql-size-huge){
-    font-size: 2.5em;
-  }
-
-  :global(.ql-size-small){
-    font-size: 0.75em;
-  }
-
-  :global(.ql-align-center){
-    text-align: center;
-  }
-
-  :global(.ql-align-left){
-    text-align: left;
-  }
-
-  :global(.ql-align-right){
-    text-align: right;
-  }
-
-  :global(.ql-align-justify){
-    text-align: justify;
+  :global(.ql-editor p img){
+    display: block;
+    max-width: 800px !important;
+    margin: 0 auto;
   }
 
   :global(.ql-syntax){
-    background-color: #000;
-    color: #fff;
-    border: 1px solid #ccc;
+    background-color: #23241f;
+    color: #f8f8f2;
     overflow: visible;
     white-space: pre-wrap;
-    padding: 8px;
+    margin-bottom: 5px;
+    margin-top: 5px;
+    padding: 5px 10px;
+    border: 1px solid grey;
+    border-radius: 3px;
   }
-
 </style>
